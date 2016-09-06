@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Brick : MonoBehaviour {
 
-    public float shineDelta;
+    // Public
+    public int value = 1;
 
 	// Use this for initialization
 	void Start () {
