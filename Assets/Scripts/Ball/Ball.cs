@@ -34,4 +34,9 @@ public class Ball : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D collision) {
         currentState.OnCollisionEnter2D(collision);
     }
+
+    // Gives ball a direction vector
+    public void SetDirection(Vector3 d) {
+        direction = d.normalized;
+    }
 }

@@ -4,8 +4,10 @@ using System.Collections;
 public class Paddle : MonoBehaviour {
 
     // Public
+    public float sensitivity;
     public float xBound;
-
+    public bool canMove = true;
+    
 	// Use this for initialization
 	void Start () {
 
@@ -13,15 +15,18 @@ public class Paddle : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Move();
+        if (canMove) Move();
 	}
 
     // Moves the paddle along the horizontal according to mouse
     private void Move() {
+        float xMovement = Input.GetAxis("Mouse X");
 
-        float xPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
+        // move
+        transform.position += Vector3.right * xMovement * sensitivity * Time.deltaTime;
+
         // clamp to bounds
-        transform.position = new Vector3(Mathf.Clamp(xPosition, -xBound, xBound), transform.position.y, transform.position.z);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -xBound, xBound), transform.position.y, transform.position.z);
     }
 
 

@@ -38,14 +38,40 @@ public class OnPaddleState : IBallState {
 
     // Poll for left mouse click to launch the ball
     private void CheckForLaunch() {
+        // enter aim mode
         if (Input.GetMouseButtonDown(0)) {
-            SetDirection();
+            ball.gameManager.setAimMode(true);
+        }
+
+        // read aim input
+        if (Input.GetMouseButton(0)) {
+            aimBall();
+        }
+
+        // launch ball
+        if (Input.GetMouseButtonUp(0)) {
+            ball.gameManager.setAimMode(false);
             ToMoveState();
         }
     }
 
-    // Gives ball a direction vector
-    private void SetDirection() {
-        ball.direction = new Vector3(Random.Range(-1.0f, 1.0f), 1.0f, 0).normalized;
+    private void aimBall() {
+        // get mouse x and y
+        float xPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
+        float yPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
+
+        // get mouse x,y delta from launch point
+        float xAim = ball.gameManager.aimArrow.transform.position.x - xPosition;
+        float yAim = yPosition - ball.gameManager.aimArrow.transform.position.y;
+
+        // get the aiming direction and angle
+        Vector3 direction = new Vector3(-xAim, yAim, 0);
+        float angle = Mathf.Sign(xAim) * Mathf.Min(Vector3.Angle(Vector3.up, direction), ball.gameManager.aimFieldAngle / 2);
+
+        // rotate the aim arrow
+        ball.gameManager.aimArrow.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        // update ball launch direction
+        ball.SetDirection(direction);
     }
 }

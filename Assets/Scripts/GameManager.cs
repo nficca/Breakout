@@ -7,9 +7,11 @@ public class GameManager : MonoBehaviour {
     // Public
     public GameObject ball;
     public GameObject paddle;
+    public GameObject aimArrow;
     public Transform ballSpawnPoint;
 
     public float ballSpawnDelay = 1.0f;
+    public float aimFieldAngle = 160.0f;
 
     // Private
     private int score;
@@ -23,6 +25,12 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 	    
 	}
+
+    // Turns the aim arrow on/off and disables/enables the paddle
+    public void setAimMode(bool active) {
+        aimArrow.SetActive(active);
+        paddle.GetComponent<Paddle>().canMove = !active;
+    }
 
     // Adds points to score
     public void AddPoints(int points) {
@@ -39,6 +47,7 @@ public class GameManager : MonoBehaviour {
         StartCoroutine("RespawnBallCo");
     }
 
+    // Coroutine for respawning ball
     private IEnumerator RespawnBallCo() {
         ball.SetActive(false);
 
