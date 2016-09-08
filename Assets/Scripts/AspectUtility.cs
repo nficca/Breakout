@@ -30,7 +30,7 @@ public class AspectUtility : MonoBehaviour {
 
         currentScreenWidth = Screen.width;
         currentScreenHeight = Screen.height;
-        aspectRatio = Screen.width / Screen.height;
+        aspectRatio = Screen.width / Screen.height;  
 
         SetCamera();
     }

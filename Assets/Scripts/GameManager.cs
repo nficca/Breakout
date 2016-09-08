@@ -12,9 +12,15 @@ public class GameManager : MonoBehaviour {
 
     public float ballSpawnDelay = 1.0f;
     public float aimFieldAngle = 160.0f;
+    public float aimSensitivity = 90.0f;
 
     // Private
     private int score;
+    private Paddle paddleController;
+
+    void Awake() {
+        paddleController = paddle.GetComponent<Paddle>();
+    }
 
     // Use this for initialization
     void Start () {
@@ -29,7 +35,10 @@ public class GameManager : MonoBehaviour {
     // Turns the aim arrow on/off and disables/enables the paddle
     public void setAimMode(bool active) {
         aimArrow.SetActive(active);
-        paddle.GetComponent<Paddle>().canMove = !active;
+        paddleController.canMove = !active;
+
+        // resets aim arrrow rotation
+        aimArrow.transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
     }
 
     // Adds points to score

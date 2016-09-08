@@ -56,22 +56,27 @@ public class OnPaddleState : IBallState {
     }
 
     private void aimBall() {
-        // get mouse x and y
-        float xPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition).x;
-        float yPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition).y;
+        // read horizontal mouse input
+        float xMovement = -Input.GetAxis("Mouse X");
 
-        // get mouse x,y delta from launch point
-        float xAim = ball.gameManager.aimArrow.transform.position.x - xPosition;
-        float yAim = yPosition - ball.gameManager.aimArrow.transform.position.y;
+        // calculate new angle with mouse input
+        float newAngle = ball.gameManager.aimArrow.transform.rotation.eulerAngles.z + xMovement * ball.gameManager.aimSensitivity * Time.deltaTime;
 
-        // get the aiming direction and angle
-        Vector3 direction = new Vector3(-xAim, yAim, 0);
-        float angle = Mathf.Sign(xAim) * Mathf.Min(Vector3.Angle(Vector3.up, direction), ball.gameManager.aimFieldAngle / 2);
+        // bound new angle to restricted angle setting
+        float rotationBound = ball.gameManager.aimFieldAngle / 2;
+        if (newAngle > rotationBound && newAngle < 360.0f - rotationBound) {
+            if (newAngle - rotationBound < 360.0f - rotationBound - newAngle) {
+                newAngle = rotationBound;
+            } else {
+                newAngle = 360.0f - rotationBound;
+            }
+        }
 
-        // rotate the aim arrow
-        ball.gameManager.aimArrow.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        // set the aim arrow's rotation
+        Quaternion q = Quaternion.AngleAxis(newAngle, Vector3.forward);
+        ball.gameManager.aimArrow.transform.rotation = q;
 
-        // update ball launch direction
-        ball.SetDirection(direction);
+        // update the ball launch direction
+        ball.SetDirection(q * Vector3.up);
     }
 }
