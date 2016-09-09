@@ -4,6 +4,7 @@ using System.Collections;
 public class OnPaddleState : IBallState {
 
     private readonly Ball ball;
+    private bool aiming;
 
     // Constructor
     public OnPaddleState (Ball b) {
@@ -41,6 +42,7 @@ public class OnPaddleState : IBallState {
         // enter aim mode
         if (Input.GetMouseButtonDown(0)) {
             ball.gameManager.setAimMode(true);
+            aiming = true;
         }
 
         // read aim input
@@ -50,8 +52,11 @@ public class OnPaddleState : IBallState {
 
         // launch ball
         if (Input.GetMouseButtonUp(0)) {
-            ball.gameManager.setAimMode(false);
-            ToMoveState();
+            if (aiming) {
+                aiming = false;
+                ball.gameManager.setAimMode(false);
+                ToMoveState();
+            }
         }
     }
 
