@@ -6,7 +6,7 @@ public class ScreenCollider : MonoBehaviour {
     public EdgeCollider2D edgeCollider;
 
     // Private
-    private Vector3 floorPadding = new Vector3(0, -0.5f, 0);
+    private Vector3 floorPadding = Vector3.zero;
 
     // Use this for initialization
     void Start () {

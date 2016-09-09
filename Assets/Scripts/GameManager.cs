@@ -9,22 +9,23 @@ public class GameManager : MonoBehaviour {
     public GameObject paddle;
     public GameObject aimArrow;
     public Transform ballSpawnPoint;
+    public ScoreTracker scoreTracker;
 
     public float ballSpawnDelay = 1.0f;
     public float aimFieldAngle = 160.0f;
     public float aimSensitivity = 90.0f;
 
     // Private
-    private int score;
     private Paddle paddleController;
 
     void Awake() {
         paddleController = paddle.GetComponent<Paddle>();
+        scoreTracker = GetComponent<ScoreTracker>();
     }
 
     // Use this for initialization
     void Start () {
-        score = 0;
+        
 	}
 	
 	// Update is called once per frame
@@ -39,11 +40,6 @@ public class GameManager : MonoBehaviour {
 
         // resets aim arrrow rotation
         aimArrow.transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
-    }
-
-    // Adds points to score
-    public void AddPoints(int points) {
-        score += points;
     }
 
     // Restarts the game

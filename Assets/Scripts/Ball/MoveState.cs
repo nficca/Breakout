@@ -56,18 +56,28 @@ public class MoveState : IBallState {
 
     // Handle paddle collision
     private void CollideWithPaddle(Paddle paddle, Vector2 normal) {
-        if (normal == Vector2.down) ToOnPaddleState();
+        if (normal == Vector2.down) {
+            ToOnPaddleState();
+            ball.gameManager.scoreTracker.ResetAllMultipliers();
+        } else {
+            ball.gameManager.scoreTracker.ResetBrickMultiplier();
+            ball.gameManager.scoreTracker.IncreaseRallyMultiplier();
+        }
     }
 
     // Handle brick collision
     private void CollideWithBrick(Brick brick, Vector2 normal) {
-        ball.gameManager.AddPoints(brick.value);
+        ball.gameManager.scoreTracker.AddPoints(brick.value);
+        ball.gameManager.scoreTracker.IncreaseBrickMultiplier();
         Object.Destroy(brick.gameObject);  
     }
 
     // Handle screen collider collsion
     private void CollideWithScreenCollider(ScreenCollider screenCollider, Vector2 normal) {
-        if (normal == Vector2.up) ToOnPaddleState();
+        if (normal == Vector2.up) {
+            ToOnPaddleState();
+            ball.gameManager.scoreTracker.ResetAllMultipliers();
+        }
     }
 
     // Reflects the ball's direction along the normal
