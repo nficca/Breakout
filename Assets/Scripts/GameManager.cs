@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -9,11 +10,15 @@ public class GameManager : MonoBehaviour {
     public GameObject paddle;
     public GameObject aimArrow;
     public Transform ballSpawnPoint;
-    public ScoreTracker scoreTracker;
+    public GameObject GameOver;
+
+    [HideInInspector] public ScoreTracker scoreTracker;
 
     public float ballSpawnDelay = 1.0f;
     public float aimFieldAngle = 160.0f;
     public float aimSensitivity = 90.0f;
+
+    public int totalBricks;
 
     // Private
     private Paddle paddleController;
@@ -21,6 +26,7 @@ public class GameManager : MonoBehaviour {
     void Awake() {
         paddleController = paddle.GetComponent<Paddle>();
         scoreTracker = GetComponent<ScoreTracker>();
+        totalBricks = FindObjectsOfType<Brick>().Length;
     }
 
     // Use this for initialization
@@ -60,5 +66,15 @@ public class GameManager : MonoBehaviour {
 
         ball.transform.position = ballSpawnPoint.position;
         ball.SetActive(true);
+    }
+
+    public void EndGame() {
+        Time.timeScale = 0;
+        GameOver.SetActive(true);
+        GetComponent<CursorControl>().LockState = CursorLockMode.None;
+    }
+
+    public void Quit() {
+        Application.Quit();
     }
 }

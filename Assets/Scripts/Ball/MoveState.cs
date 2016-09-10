@@ -79,7 +79,10 @@ public class MoveState : IBallState {
     private void CollideWithBrick(Brick brick, Vector2 normal) {
         ball.gameManager.scoreTracker.AddPoints(brick.value);
         ball.gameManager.scoreTracker.IncreaseBrickMultiplier();
-        Object.Destroy(brick.gameObject);  
+        Object.Destroy(brick.gameObject);
+        if (--ball.gameManager.totalBricks <= 0) {
+            ball.gameManager.EndGame();
+        } 
     }
 
     // Handle screen collider collsion

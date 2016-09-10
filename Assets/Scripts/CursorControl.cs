@@ -3,7 +3,20 @@ using System.Collections;
 
 public class CursorControl : MonoBehaviour {
 
-    public CursorLockMode lockState = CursorLockMode.Locked;
+    private CursorLockMode lockState = CursorLockMode.Locked;
+
+    public CursorLockMode LockState {
+        get {
+            return lockState;
+        }
+
+        set {
+            lockState = value;
+            Cursor.lockState = lockState;
+        }
+    }
+
+
 
     // Use this for initialization
     void Start() {
