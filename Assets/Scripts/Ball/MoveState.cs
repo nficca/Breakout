@@ -60,8 +60,12 @@ public class MoveState : IBallState {
 
     // Handle paddle collision
     private void CollideWithPaddle(Paddle paddle, Vector2 normal, Vector2 point) {
+        // only increase rally multiplier if bricks were hit
+        if (ball.gameManager.scoreTracker.getBrickMultiplier > 1) {
+            ball.gameManager.scoreTracker.IncreaseRallyMultiplier();
+        }
+
         ball.gameManager.scoreTracker.ResetBrickMultiplier();
-        ball.gameManager.scoreTracker.IncreaseRallyMultiplier();
 
         // give the player a little control...
         if (normal == Vector2.up) {

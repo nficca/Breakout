@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 public class ScoreTracker : MonoBehaviour {
 
+    public int brickMultiplierMax = 99;
+    public int rallyMultiplierMax = 99;
+
     private int score;
     private int brickMultiplier;
     private int rallyMultiplier;
@@ -55,16 +58,35 @@ public class ScoreTracker : MonoBehaviour {
 
     // Increase brick score multiplier by amount
     public void IncreaseBrickMultiplier(int amound = 1) {
-        brickMultiplier += 1;
-        UpdateUI();
+        if (brickMultiplier < brickMultiplierMax) {
+            brickMultiplier += 1;
+            UpdateUI();
+        }
     }
 
     // Increase paddle score multiplier by amount
     public void IncreaseRallyMultiplier(int amount = 1) {
-        rallyMultiplier += 1;
-        UpdateUI();
+        if (rallyMultiplier < rallyMultiplierMax) {
+            rallyMultiplier += 1;
+            UpdateUI();
+        }
     }
 
+    // Gets current brick multiplier
+    public int getBrickMultiplier {
+        get {
+            return brickMultiplier;
+        }
+    }
+
+    // Gets current rally multiplier
+    public int getRallyMultiplier {
+        get {
+            return rallyMultiplier;
+        }
+    }
+
+    // Updates the each UI text with its cooresponding value
     private void UpdateUI() {
         scoreText.text = "" + score;
         brickMultiplierText.text = "x" + brickMultiplier;
