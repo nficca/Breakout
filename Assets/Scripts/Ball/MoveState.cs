@@ -19,6 +19,7 @@ public class MoveState : IBallState {
     public void OnCollisionEnter2D(Collision2D collision) {
         // get normal
         Vector2 normal = collision.contacts[0].normal;
+        Vector2 contactPoint = collision.contacts[0].point;
 
         // assign collision object
         Paddle          paddle          =   collision.gameObject.GetComponent<Paddle>();
@@ -27,15 +28,18 @@ public class MoveState : IBallState {
 
         // handle collision with object
         if (paddle != null) {
-            CollideWithPaddle(paddle, normal);
+            CollideWithPaddle(paddle, normal, contactPoint);
+            // top face of paddle collision does not use standard bounce
+            if (normal != Vector2.up) Bounce(normal);
         } else if (brick != null) {
             CollideWithBrick(brick, normal);
+            Bounce(normal);
         } else if (screenCollider != null) {
             CollideWithScreenCollider(screenCollider, normal);
+            Bounce(normal);
         }
 
-        // bounce ball
-        Bounce(normal);
+        
     }
 
     // Move to on paddle state
@@ -55,13 +59,15 @@ public class MoveState : IBallState {
     }
 
     // Handle paddle collision
-    private void CollideWithPaddle(Paddle paddle, Vector2 normal) {
-        if (normal == Vector2.down) {
-            ToOnPaddleState();
-            ball.gameManager.scoreTracker.ResetAllMultipliers();
-        } else {
-            ball.gameManager.scoreTracker.ResetBrickMultiplier();
-            ball.gameManager.scoreTracker.IncreaseRallyMultiplier();
+    private void CollideWithPaddle(Paddle paddle, Vector2 normal, Vector2 point) {
+        ball.gameManager.scoreTracker.ResetBrickMultiplier();
+        ball.gameManager.scoreTracker.IncreaseRallyMultiplier();
+
+        // give the player a little control...
+        if (normal == Vector2.up) {
+            float variance = point.x - paddle.gameObject.transform.position.x;
+            ball.direction = new Vector3(variance, -ball.direction.y, 0);
+            ball.direction.Normalize();
         }
     }
 

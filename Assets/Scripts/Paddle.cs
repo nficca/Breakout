@@ -5,6 +5,7 @@ public class Paddle : MonoBehaviour {
 
     // Public
     public float sensitivity;
+    public float handling;
     public bool canMove = true;
 
     // Private
